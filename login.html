@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz游戏 - 登录</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">Quiz游戏</h1>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">登录</button>
+                <div class="register-link">
+                    <span>还没有账户？</span>
+                    <a href="register.html">立即注册</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert('请填写所有字段');
+                return;
+            }
+
+            // 发送登录请求
+            axios.post('http://localhost:8080/api/user/login', {
+                username: username,
+                password: password
+            })
+            .then(function(response) {
+                const res = response.data;
+                if (res.code === 1) {
+                    // 登录成功，保存token并跳转
+                    localStorage.setItem('token', res.data);
+                    alert('登录成功！');
+                    window.location.href = 'quiz.html';
+                } else {
+                    // 登录失败，提示用户
+                    alert(res.msg || '登录失败');
+                }
+            })
+            .catch(function(error) {
+                console.error('登录请求失败:', error);
+                alert('请求失败，请稍后重试');
+            });
+        });
+    </script>
+</body>
+</html>

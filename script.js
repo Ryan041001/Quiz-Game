@@ -13,64 +13,120 @@ const maxScoreSpan = document.getElementById("max-score");
 const resultMessage = document.getElementById("result-message");
 const restartButton = document.getElementById("restart-btn");
 const progressBar = document.getElementById("progress");
+const logoutButton = document.getElementById("logout-btn");
 
-const quizQuestions = [
-  {
-    question: "What is the capital of France?",
-    answers: [
-      { text: "London", correct: false },
-      { text: "Berlin", correct: false },
-      { text: "Paris", correct: true },
-      { text: "Madrid", correct: false },
-    ],
-  },
-  {
-    question: "Which planet is known as the Red Planet?",
-    answers: [
-      { text: "Venus", correct: false },
-      { text: "Mars", correct: true },
-      { text: "Jupiter", correct: false },
-      { text: "Saturn", correct: false },
-    ],
-  },
-  {
-    question: "What is the largest ocean on Earth?",
-    answers: [
-      { text: "Atlantic Ocean", correct: false },
-      { text: "Indian Ocean", correct: false },
-      { text: "Arctic Ocean", correct: false },
-      { text: "Pacific Ocean", correct: true },
-    ],
-  },
-  {
-    question: "Which of these is NOT a programming language?",
-    answers: [
-      { text: "Java", correct: false },
-      { text: "Python", correct: false },
-      { text: "Banana", correct: true },
-      { text: "JavaScript", correct: false },
-    ],
-  },
-  {
-    question: "What is the chemical symbol for gold?",
-    answers: [
-      { text: "Go", correct: false },
-      { text: "Gd", correct: false },
-      { text: "Au", correct: true },
-      { text: "Ag", correct: false },
-    ],
-  },
-];
+// const quizQuestions = [
+//   {
+//     question: "What is the capital of France?",
+//     answers: [
+//       { text: "London", correct: false },
+//       { text: "Berlin", correct: false },
+//       { text: "Paris", correct: true },
+//       { text: "Madrid", correct: false },
+//     ],
+//   },
+//   {
+//     question: "Which planet is known as the Red Planet?",
+//     answers: [
+//       { text: "Venus", correct: false },
+//       { text: "Mars", correct: true },
+//       { text: "Jupiter", correct: false },
+//       { text: "Saturn", correct: false },
+//     ],
+//   },
+//   {
+//     question: "What is the largest ocean on Earth?",
+//     answers: [
+//       { text: "Atlantic Ocean", correct: false },
+//       { text: "Indian Ocean", correct: false },
+//       { text: "Arctic Ocean", correct: false },
+//       { text: "Pacific Ocean", correct: true },
+//     ],
+//   },
+//   {
+//     question: "Which of these is NOT a programming language?",
+//     answers: [
+//       { text: "Java", correct: false },
+//       { text: "Python", correct: false },
+//       { text: "Banana", correct: true },
+//       { text: "JavaScript", correct: false },
+//     ],
+//   },
+//   {
+//     question: "What is the chemical symbol for gold?",
+//     answers: [
+//       { text: "Go", correct: false },
+//       { text: "Gd", correct: false },
+//       { text: "Au", correct: true },
+//       { text: "Ag", correct: false },
+//     ],
+//   },
+// ];
 
 // QUIZ STATE VARS
 let currentQuestionIndex = 0;
 let score = 0;
 let answersDisabled = false;
+let quizQuestions = []; // Initialize as empty array
 
-totalQuestionsSpan.textContent = quizQuestions.length;
-maxScoreSpan.textContent = quizQuestions.length;
+// totalQuestionsSpan.textContent = quizQuestions.length; // Move this to after fetching
+// maxScoreSpan.textContent = quizQuestions.length;
 
-startButton.addEventListener("click", startQuiz);
+startButton.addEventListener("click", fetchQuestionsAndStart);
+if (logoutButton) {
+    logoutButton.addEventListener("click", function() {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+    });
+}
+
+function fetchQuestionsAndStart() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('请先登录');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  axios.get('http://localhost:8080/api/question/question/all', {
+    headers: {
+      'token': token
+    }
+  })
+  .then(function(response) {
+    const res = response.data;
+    if (res.code === 1) {
+      // Transform backend data to frontend format
+      quizQuestions = res.data.map(q => {
+        return {
+          question: q.question,
+          answers: [
+            { text: q.optionA, correct: q.answer === 'A' },
+            { text: q.optionB, correct: q.answer === 'B' },
+            { text: q.optionC, correct: q.answer === 'C' },
+            { text: q.optionD, correct: q.answer === 'D' }
+          ]
+        };
+      });
+      
+      totalQuestionsSpan.textContent = quizQuestions.length;
+      maxScoreSpan.textContent = quizQuestions.length;
+      
+      startQuiz();
+    } else {
+      alert(res.msg || '获取题目失败');
+    }
+  })
+  .catch(function(error) {
+    console.error('获取题目失败:', error);
+    if (error.response && error.response.status === 401) {
+        alert('登录已过期，请重新登录');
+        window.location.href = 'login.html';
+    } else {
+        alert('请求题目失败，请稍后重试');
+    }
+  });
+}
 
 function startQuiz() {
   // reset vars
