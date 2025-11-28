@@ -41,8 +41,8 @@
                 return;
             }
 
-            // 发送登录请求
-            axios.post('http://localhost:8080/api/user/login', {
+            // 发送登录请求（使用相对路径 /api，以便通过 Nginx 代理后端）
+            axios.post('/api/user/login', {
                 username: username,
                 password: password
             })

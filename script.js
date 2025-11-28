@@ -88,11 +88,12 @@ function fetchQuestionsAndStart() {
     return;
   }
 
-  axios.get('http://localhost:8080/api/question/question/all', {
-    headers: {
-      'token': token
-    }
-  })
+    // 使用相对路径 /api/，由 Nginx 代理到后端；避免前端硬编码 localhost
+    axios.get('/api/question/question/all', {
+      headers: {
+        'token': token
+      }
+    })
   .then(function(response) {
     const res = response.data;
     if (res.code === 1) {
@@ -149,13 +150,22 @@ function showQuestion() {
 
   const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
   progressBar.style.width = progressPercent + "%";
+  
+  // Animation reset for question text
+  questionText.classList.remove('fade-in');
+  void questionText.offsetWidth; // trigger reflow
+  questionText.classList.add('fade-in');
+
   questionText.textContent = currentQuestion.question;
   answersContainer.innerHTML = "";
 
-  currentQuestion.answers.forEach((answer) => {
+  currentQuestion.answers.forEach((answer, index) => {
     const button = document.createElement("button");
     button.textContent = answer.text;
     button.classList.add("answer-btn");
+    
+    // Staggered animation for buttons
+    button.style.animation = `fadeIn 0.4s ease-out ${index * 0.1}s backwards`;
 
     // what is dataset? it's a property of the button element that allows you to store custom data
     button.dataset.correct = answer.correct;

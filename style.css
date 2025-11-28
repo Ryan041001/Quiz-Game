@@ -1,46 +1,82 @@
+/* 全局变量定义，方便管理颜色 */
+:root {
+    --primary-color: #e86a33;
+    --primary-hover: #d45b28;
+    --bg-color: #f5efe6;
+    --card-bg: #ffffff;
+    --text-main: #2d3748;
+    --text-secondary: #718096;
+    --border-color: #eadbc8;
+    --input-bg: #f8f9fa;
+    --success-color: #48bb78;
+    --error-color: #f56565;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+}
+
 /* 全局样式 */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    line-height: 1.5;
+}
+
+/* 通用容器样式 (用于 Quiz 和 登录/注册) */
+.container, .login-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 500px; /* 稍微统一一下宽度 */
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container {
+    max-width: 600px; /* Quiz 界面宽一点 */
 }
 
 /* 登录/注册页面样式 */
 .login-container {
-    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* min-height: 100vh; */
-    /* padding: 1rem; */
-    /* font-family: 'Helvetica Neue', Arial, sans-serif; */
 }
 
 .login-card {
-    background: white;
-    /* backdrop-filter: blur(10px); */
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    padding: 3rem;
+    padding: 2.5rem;
     text-align: center;
-    /* border: 1px solid rgba(255, 255, 255, 0.2); */
 }
 
 .login-title {
-    color: #e86a33;
+    color: var(--primary-color);
     margin-bottom: 2rem;
     font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 .form-group {
@@ -50,293 +86,275 @@
 }
 
 .form-group label {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
     font-weight: 600;
     font-size: 0.9rem;
 }
 
 .form-group input {
-    padding: 1rem;
-    border: 2px solid #eadbc8;
-    border-radius: 10px;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
     font-size: 1rem;
-    transition: all 0.3s ease;
-    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+    background-color: var(--input-bg);
+    color: var(--text-main);
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #e86a33;
+    border-color: var(--primary-color);
     background-color: white;
-    box-shadow: 0 0 0 3px rgba(232, 106, 51, 0.1);
+    box-shadow: 0 0 0 3px rgba(232, 106, 51, 0.15);
 }
 
-.login-btn {
-    background-color: #e86a33;
+/* 按钮通用样式 */
+button, .login-btn {
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 1rem 2rem;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
+    transition: all 0.2s ease;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
 }
 
-.login-btn:hover {
-    background-color: #d45b28;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(232, 106, 51, 0.2);
+button:hover, .login-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
 
-.login-btn:active {
+button:active, .login-btn:active {
     transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+button:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .register-link {
     margin-top: 1.5rem;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
-.register-link span {
-    margin-right: 0.5rem;
-}
-
 .register-link a {
-    color: #e86a33;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
 }
 
 .register-link a:hover {
-    color: #d45b28;
+    color: var(--primary-hover);
     text-decoration: underline;
+}
+
+/* Quiz 界面样式 */
+.screen {
+    display: none;
+    padding: 2.5rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.screen.active {
+    display: block;
+}
+
+#start-screen {
+    text-align: center;
+}
+
+#start-screen h1 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+#start-screen p {
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.quiz-header {
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+#question-text {
+    color: var(--text-main);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.quiz-info {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.answer-btn {
+    background-color: white;
+    color: var(--text-main);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.answer-btn:hover {
+    background-color: #fffaf5; /* 极淡的橙色背景 */
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.answer-btn.correct {
+    background-color: #f0fff4;
+    border-color: var(--success-color);
+    color: #2f855a;
+}
+
+.answer-btn.incorrect {
+    background-color: #fff5f5;
+    border-color: var(--error-color);
+    color: #c53030;
+}
+
+.progress-bar {
+    height: 0.75rem;
+    background-color: #edf2f7;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.progress {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 9999px;
+}
+
+#result-screen {
+    text-align: center;
+}
+
+#result-screen h1 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.result-info {
+    background-color: #fffaf5;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.result-info p {
+    font-size: 1.25rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.result-message {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 1rem;
 }
 
 /* 错误提示样式 */
 .error-message {
-    color: #dc3545;
+    color: var(--error-color);
     font-size: 0.85rem;
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
     text-align: left;
     animation: slideIn 0.3s ease;
 }
 
+/* 动画定义 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* 响应式设计 */
-@media(max-width: 500px){
-    .login-container {
-        padding: 0.5rem;
+@media (max-width: 640px) {
+    .container, .login-card {
+        max-width: 100%;
+        border-radius: 0; /* 移动端全屏可能更好，或者保持圆角但margin小点 */
+        box-shadow: none;
     }
     
-    .login-card {
-        padding: 2rem;
-        margin: 1rem;
+    body {
+        padding: 0;
+        background-color: white; /* 移动端背景纯白 */
+    }
+
+    .screen, .login-card {
+        padding: 1.5rem;
+        min-height: 100vh; /* 充满屏幕 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     
-    .login-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+    .screen.active {
+        display: flex; /* 覆盖上面的 display: none */
+    }
+
+    .login-title, #start-screen h1 {
+        font-size: 1.75rem;
     }
     
-    .login-form {
-        gap: 1rem;
+    #question-text {
+        font-size: 1.2rem;
     }
     
-    .form-group input {
-        padding: 0.8rem;
-        font-size: 0.9rem;
-    }
-    
-    .login-btn {
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-    }
-}
-
-body{
-    background-color: #f5efe6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding:1rem;
-    font-family: sans-serif;
-}
-
-.container{
-    background-color: white;
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width:100%;
-    max-width: 600px;
-    overflow:hidden;
-    position: relative;
-}
-
-.screen{
-    display: none;
-    padding: 2rem;
-    text-align: center;
-}
-
-.screen.active{
-    display: block;
-}
-
-#start-screen h1{
-    color:#e86a33;
-    margin-bottom: 20px;
-    font-size: 2.5rem;
-}
-
-#start-screen p{
-    color: #666;
-    margin-bottom: 30px;
-    font-size: 1.1rem;
-}
-
-button{
-    background-color: #e86a33;
-    color: white;
-    border:none;
-    padding: 15px 30px;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover{
-    background-color: #d45b28;
-}
-
-.quiz-header{
-    margin-bottom: 1rem;
-}
-
-#question-text{
-    color: #333;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.quiz-info{
-    display: flex;
-    justify-content: space-between;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.answers-container{
-    display: flex;
-    flex-direction: column;
-    gap:10px;
-    margin-bottom: 20px;
-}
-
-.answer-btn{
-    background-color: #f8f0e5;
-    color: #333;
-    border: 2px solid #eadbc8;
-    border-radius: 10px;
-    padding: 1rem;
-    cursor: pointer;
-    text-align: left;
-    transition:all 0.3s;
-}
-
-.answer-btn:hover{
-    background-color: #eadbc8;
-    border-color: #dac0ae;
-}
-
-.answer-btn.correct{
-    background-color: #e6fff0;
-    border-color: #a3f0c4;
-    color: #28a745;
-}
-
-.answer-btn.incorrect{
-    background-color: #fff0f0;
-    border-color: #ffbdbd;
-    color: #dc3545;
-}
-
-/*to be added for answer button*/
-
-.progress-bar{
-    height: 10px;
-    background-color: #f8f0e5;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 20px;
-}
-
-.progress{
-    height:100%;
-    background-color: #e86a33;
-    width: 0%;
-    transition: width 0.3s;
-}
-
-#result-screen h1{
-    color: #e86a33;
-    margin-bottom: 30px;
-}
-
-.result-info{
-    background-color: #f8f0e5;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 30px;
-}
-
-.result-info p{
-    font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 1rem;
-}
-
-.result-message{
-    font-size:1.5rem;
-    font-weight: 600;
-    color:#e86a33;
-}
-
-@media(max-width:500px){
-    .screen{
-        padding: 1rem;
-    }
-
-    #start-screen h1{
-        font-size: 2rem;
-    }
-
-    #question-text{
-        font-size: 1.3rem;
-    }
-
-    .answer-btn{
-        padding:12px;
-    }
-
-    button{
-        padding: 12px 25px;
-        font-size: 1rem;
+    .answer-btn {
+        padding: 0.875rem;
     }
 }

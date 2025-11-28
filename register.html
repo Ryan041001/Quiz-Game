@@ -73,8 +73,8 @@
 
             if (!isValid) return;
 
-            // 发送注册请求
-            axios.post('http://localhost:8080/api/user/register', {
+            // 发送注册请求（使用相对路径 /api，以便通过 Nginx 代理后端）
+            axios.post('/api/user/register', {
                 username: username,
                 password: password,
                 checkpassword: confirmPassword
